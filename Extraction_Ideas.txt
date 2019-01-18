@@ -1,0 +1,23 @@
+====== | Assess Meta with No Values | ======
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- #activity
+How often has pixel A changed in the last T time?
+
+
+====== | Assess a Found Value in Overall Time | ======
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- #commonality
+What percentage of the time T, has pixel A been the common value?
+
+
+====== | Assess the Current Value in Current Time | ======
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- #duration
+From now, looking back, how long has pixel A been this?
+
+
+====== | Assess the Current Value in Overall Time | ======
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- #consistency
+What percentage of the time T, has pixel A been this?
+
+
+These are used to determine what should be added as the background image.
+Threshold the values to how temporary changes to the image are handled.
+Once the background is generated, extraction can be done.
