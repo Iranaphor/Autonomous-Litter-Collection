@@ -1,5 +1,5 @@
-clear; close all; clc
-
+% clear; close all; clc
+%%
 f_camSetup = @camSetup;
 f_camStart= @camStart;
 
@@ -17,6 +17,12 @@ f_entropyExtract = @entropyExtract;
 
 f_entropyComparison = @entropyComparison;
 
+
+f_histeqFind = @histeqFind;
+
+
+%%
+
 % pause(0.1); obj = camSetup('winvideo', 2);
 % pause(0.1); preview(obj);
 % pause(0.1); frames = camStart(obj, 20, 1);
@@ -32,22 +38,43 @@ f_entropyComparison = @entropyComparison;
 % [labels, objects] = findFG(images(:,:,:,1), bg);
 
 
-pause(0.1); images = readIMGs("yacht_images", ".PNG");
-pause(0.1); frameEntropy = f_entropyGroup(images);
-pause(0.1); bgEntropy = f_entropyBG(frameEntropy);
-pause(0.1); [objs, lbl] = f_entropyCompare(bgEntropy, frameEntropy(:,:,1));
-pause(0.1); object = f_entropyExtract(objs, frameEntropy);
+% pause(0.1); images = readIMGs("yacht_images", ".PNG");
+% pause(0.1); frameEntropy = f_entropyGroup(images);
+% pause(0.1); bgEntropy = f_entropyBG(frameEntropy);
+% pause(0.1); [objs, lbl] = f_entropyCompare(bgEntropy, frameEntropy(:,:,1));
+% pause(0.1); object = f_entropyExtract(objs, frameEntropy);
 
 
 
 %%
 
-function tv = entropyComparison(bg, img)
 
-    r = 10;
-    im1 = f_entropySig(double(bg),r);
-    im2 = f_entropySig(double(img),r);
-    t = im2 - im1;
+% f_histeqFind(bg, imA);
+function out = histeqFind(bg, img)
+    % rgb2gray(histeq(imA)) - rgb2gray(histeq(bg))
+
+    a = rgb2gray(histeq(img)) - rgb2gray(histeq(bg)); 
+    
+    ar = img(:,:,1); ar(~imdilate(medfilt2(imbinarize(a, 0.3), [5 5]), ones(10)))=0;
+
+    
+    out = zeros(size(img));
+    out(:,:,1) = ar; out(:,:,2) = ar; out(:,:,3) = ar;
+    
+    subplot(3, 1, [1 2]); imagesc(out);
+    hi = out;
+    hi(hi==0)=[];
+    subplot(3, 1, 3); hist(hi);
+    
+end
+
+%Can detect changes in texture (not my bottle on 1C floor)
+function [tv, im1, im2] = entropyComparison(bg, img)
+
+    r = 3;
+    im1 = entropySig(double(bg),r);
+    im2 = entropySig(double(img),r);
+    t = im1 - im2;
     t(t < 0.96)=0;
     imagesc([im1, im2, t]);
     tr = img(:,:,1); tr(t==0) = 0;

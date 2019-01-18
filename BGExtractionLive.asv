@@ -1,5 +1,5 @@
-clear; close all; clc
-
+% clear; close all; clc
+%%
 f_camSetup = @camSetup;
 f_camStart= @camStart;
 
@@ -15,6 +15,13 @@ f_entropySig = @entropySig;
 f_entropyCompare = @entropyCompare;
 f_entropyExtract = @entropyExtract;
 
+f_entropyComparison = @entropyComparison;
+
+
+f_histeqFind = @histeqFind;
+
+
+%%
 
 % pause(0.1); obj = camSetup('winvideo', 2);
 % pause(0.1); preview(obj);
@@ -27,18 +34,63 @@ f_entropyExtract = @entropyExtract;
 % images = f_readIMGs("beachIMG", ".jpg");
 % pause(0.1); images = readIMGs("yacht_images", ".PNG");
 % pause(0.1); bg = findBG(images);
-% pause(0.1); imagesc(bg)
+% pause(0.1); imagesc(bg);
 % [labels, objects] = findFG(images(:,:,:,1), bg);
 
 
-pause(0.1); images = readIMGs("yacht_images", ".PNG");
-pause(0.1); frameEntropy = f_entropyGroup(images);
-pause(0.1); bgEntropy = f_entropyBG(frameEntropy);
-pause(0.1); [objs, lbl] = f_entropyCompare(bgEntropy, frameEntropy(:,:,1));
-pause(o.1); object = f_entropyExtract(obj, frame)
+% pause(0.1); images = readIMGs("yacht_images", ".PNG");
+% pause(0.1); frameEntropy = f_entropyGroup(images);
+% pause(0.1); bgEntropy = f_entropyBG(frameEntropy);
+% pause(0.1); [objs, lbl] = f_entropyCompare(bgEntropy, frameEntropy(:,:,1));
+% pause(0.1); object = f_entropyExtract(objs, frameEntropy);
+
+
+
+%%
+
+
+
+function out = histeqFind(bg, img)
+    % rgb2gray(histeq(imA)) - rgb2gray(histeq(bg))
+
+    a = rgb2gray(histeq(img)) - rgb2gray(histeq(bg)); 
+    c = ~imdilate(medfilt2(imbinarize(a, 0.3), [5 5]), ones(10));
+    
+    ar = img(:,:,1); ar(c)=0;
+    ag = ar;
+    ab = ar;
+    
+    out = zeros(size(img));
+    out(:,:,1) = ar;
+    out(:,:,2) = ag;
+    out(:,:,3) = ab;
+    
+    subplot(3, 1, [1 2]); imagesc(out);
+    subplot(3, 1, 3); hist(out);
+    
+    
+end
+
+%Can detect changes in texture (not my bottle on 1C floor)
+function [tv, im1, im2] = entropyComparison(bg, img)
+
+    r = 3;
+    im1 = entropySig(double(bg),r);
+    im2 = entropySig(double(img),r);
+    t = im1 - im2;
+    t(t < 0.96)=0;
+    imagesc([im1, im2, t]);
+    tr = img(:,:,1); tr(t==0) = 0;
+    tg = img(:,:,2); tg(t==0) = 0;
+    tb = img(:,:,3); tb(t==0) = 0;
+    tv(:,:,1) = tr; tv(:,:,2) = tg; tv(:,:,3) = tb;
+    figure, imagesc(tv);
+
+end
 
 %% Entropy Function Testing
-function obj = entropyExtract(entropyImage, cleanImage)
+function entropyImage = entropyExtract(entropyImage, cleanImage)
+    
     
     
     
@@ -79,11 +131,15 @@ end
 function SIG = entropySig(IMAGE, RADIUS)
     fprintf('Generate Entropy Signature\n');
     r = RADIUS;
+    
+    PaddIMAGE = padarray(IMAGE, [r r]);
+ 
+    
     SIG = zeros(floor(size(IMAGE, 1)/r), floor(size(IMAGE, 2)/r));
-    for i = (r+1):r:size(IMAGE, 1)-(r+1)
-        for j = (r+1):r:size(IMAGE, 2)-(r+1)
-            n = IMAGE(i-r:i+r, j-r:j+r);
-            SIG(floor(i/r), floor(j/r)) = entropy(n);
+    for i = 1:r:size(IMAGE, 1)
+        for j = 1:r:size(IMAGE, 2)
+            n = PaddIMAGE(i:i+r+r, j:j+r+r);
+            SIG(i:i+r-1, j:j+r-1) = entropy(n);
         end
     end
 end
@@ -111,6 +167,7 @@ function frames = camStart(obj, inc, pau)
 end
 
 %Included to test when camera not available
+%dir('images\yacht_images\*.PNG')
 function images = readIMGs(subfolder, fileType)
     fprintf('Reading Snapshots\n');
     
@@ -148,7 +205,7 @@ end
 function [labels, objects] = findFG(img, bg)
     fprintf('Object Extraction\n');
     a = img~=bg;
-%     a = permute(  max(  permute(a, [3, 1, 2])   )   , [2, 3, 1]);
+    a = permute(  max(  permute(a, [3, 1, 2])   )   , [2, 3, 1]);
     labels = bwlabel(imfill(imdilate(a, ones(3)),'holes'));
 
     for i = 1:max(max(labels))
