@@ -1,31 +1,45 @@
 % clear; close all; clc
 %%
-f_camSetup = @camSetup;
-f_camStart= @camStart;
-
-f_readIMGs = @readIMGs;
-f_frameUpdate = @frameUpdate;
-
-f_findBG = @findBG;
-f_findFG = @findFG;
-
-f_entropyBG = @entropyBG;
-f_entropyGroup = @entropyGroup;
-f_entropySig = @entropySig;
-f_entropyCompare = @entropyCompare;
-f_entropyExtract = @entropyExtract;
-
-f_entropyComparison = @entropyComparison;
 
 
+
+
+
+
+
+% 
+% f_entropyGroup = @entropyGroup;
+% f_entropySig = @entropySig;
+% f_entropyCompare = @entropyCompare;
+% 
+
+% CCS = @cameraControlSystem;
+% f_camSetup = @camSetup;
+% f_camStart= @camStart;
+% 
+% 
+% f_readIMGs = @readIMGs;
+% 
+% 
+% f_frameUpdate = @frameUpdate;
+
+BGE = @backgroundExtraction;
+% % f_findBG = @findBG_OLD;
+% f_entropyBG = @entropyBG;
+
+
+% FGE = @foregroundExtraction;
 f_histeqFind = @histeqFind;
+% f_entropyComparison = @entropyComparison;
+% f_findFG = @findFG;
+
 
 
 %%
 
 % pause(0.1); obj = camSetup('winvideo', 2);
 % pause(0.1); preview(obj);
-% pause(0.1); frames = camStart(obj, 20, 1);
+% pause(0.1); frames = camStart(obj, 20, 1); %Grab 20 images, 1 sec apart from cam "obj"
 % pause(0.1); frames = frameUpdate(frames, obj, 3);
 % pause(0.1); bg = findBG(frames);
 % pause(0.1); imagesc(bg)
@@ -42,28 +56,43 @@ f_histeqFind = @histeqFind;
 % pause(0.1); frameEntropy = f_entropyGroup(images);
 % pause(0.1); bgEntropy = f_entropyBG(frameEntropy);
 % pause(0.1); [objs, lbl] = f_entropyCompare(bgEntropy, frameEntropy(:,:,1));
-% pause(0.1); object = f_entropyExtract(objs, frameEntropy);
 
 
 
 %% Foreground Extraction Methods
 
-imagesc(f_histeqFind(background, image))
-% f_histeqFind(bg, imA);
-function [out, hi, bina, filt, slicer] = histeqFind(bg, img)
+bg = backgroundExtraction(frames);
+im = histeq(frames(:,:,:,12));
+subplot(2, 2, 1); imagesc(bg); axis image
+subplot(2, 2, 2); imagesc(im); axis image
+subplot(2, 1, 2); imagesc(histeqFind(bg, im)); axis image
+
+
+
+function bg = backgroundExtraction(frames)
+    
+    for i = 1:size(frames, 4)
+        frames(:,:,:,i) = histeq(frames(:,:,:,i));
+    end
+    
+    bg = mode(frames, 4);
+end
+
+
+function [out, hi, bina, filt, dila, slicer] = histeqFind(bg, img)
     out = zeros(size(img));
     
     a = rgb2gray(histeq(img)) - rgb2gray(histeq(bg));
     bina = imbinarize(a, 0.3);
     filt = medfilt2(bina, [5 5]);
-    slicer = ~imdilate(filt, ones(15));
+    dila = imdilate(filt, ones(15));
+    slicer = imerode(dila, ones(10));
     
-    slice=img(:,:,1); slice(slicer)=0; out(:,:,1) = slice;
-    slice=img(:,:,2); slice(slicer)=0; out(:,:,2) = slice;
-    slice=img(:,:,3); slice(slicer)=0; out(:,:,3) = slice;
+    slice=img(:,:,1); slice(~slicer)=0; out(:,:,1) = slice;
+    slice=img(:,:,2); slice(~slicer)=0; out(:,:,2) = slice;
+    slice=img(:,:,3); out(:,:,3) = slice;
     
-%     subplot(3, 1, [1 2]); imagesc(out);
-%     subplot(3, 1, 3); hi = out; hi(hi==0)=[]; hist(hi);
+    hi = 0;
 end
 
 %Can detect changes in texture (not my bottle on 1C floor)
@@ -85,13 +114,7 @@ end
 
 
 %% Entropy Function Testing
-function entropyImage = entropyExtract(entropyImage, cleanImage)
-    
-    
-    
-    
-    
-end
+
 
 function [objOut, labels] = entropyCompare(bgEntropy, imgEntropy)
     fprintf('Compare Entropy Background with Image Signature\n');
@@ -159,6 +182,7 @@ function frames = camStart(obj, inc, pau)
     for i = 1:inc
         pause(pau); frames(:,:,:,i) = step(obj);
         %imwrite(frame(:,:,:,i), i + ".png");
+        disp("IMAGE " + i);
     end
 end
 
@@ -190,7 +214,7 @@ function frames = frameUpdate(frames, obj, replace)
 end
 
 %Extract the background
-function background = findBG(frames)
+function background = findBG_OLD(frames)
     fprintf('Extract Background\n');
     a = permute(frames, [4, 1, 2, 3]);
     b = mode(a);
