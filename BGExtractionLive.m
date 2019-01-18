@@ -46,44 +46,43 @@ f_histeqFind = @histeqFind;
 
 
 
-%%
+%% Foreground Extraction Methods
 
-
+imagesc(f_histeqFind(background, image))
 % f_histeqFind(bg, imA);
-function out = histeqFind(bg, img)
-    % rgb2gray(histeq(imA)) - rgb2gray(histeq(bg))
-
-    a = rgb2gray(histeq(img)) - rgb2gray(histeq(bg)); 
-    
-    ar = img(:,:,1); ar(~imdilate(medfilt2(imbinarize(a, 0.3), [5 5]), ones(10)))=0;
-
-    
+function [out, hi, bina, filt, slicer] = histeqFind(bg, img)
     out = zeros(size(img));
-    out(:,:,1) = ar; out(:,:,2) = ar; out(:,:,3) = ar;
     
-    subplot(3, 1, [1 2]); imagesc(out);
-    hi = out;
-    hi(hi==0)=[];
-    subplot(3, 1, 3); hist(hi);
+    a = rgb2gray(histeq(img)) - rgb2gray(histeq(bg));
+    bina = imbinarize(a, 0.3);
+    filt = medfilt2(bina, [5 5]);
+    slicer = ~imdilate(filt, ones(15));
     
+    slice=img(:,:,1); slice(slicer)=0; out(:,:,1) = slice;
+    slice=img(:,:,2); slice(slicer)=0; out(:,:,2) = slice;
+    slice=img(:,:,3); slice(slicer)=0; out(:,:,3) = slice;
+    
+%     subplot(3, 1, [1 2]); imagesc(out);
+%     subplot(3, 1, 3); hi = out; hi(hi==0)=[]; hist(hi);
 end
 
 %Can detect changes in texture (not my bottle on 1C floor)
-function [tv, im1, im2] = entropyComparison(bg, img)
+%better when histogram equaised: imagesc(~histeq(im1./max(max(im1))) + ~histeq(im2./max(max(im1))))
+function [out, im1, im2] = entropyComparison(bg, img)
 
     r = 3;
     im1 = entropySig(double(bg),r);
     im2 = entropySig(double(img),r);
     t = im1 - im2;
     t(t < 0.96)=0;
-    imagesc([im1, im2, t]);
-    tr = img(:,:,1); tr(t==0) = 0;
-    tg = img(:,:,2); tg(t==0) = 0;
-    tb = img(:,:,3); tb(t==0) = 0;
-    tv(:,:,1) = tr; tv(:,:,2) = tg; tv(:,:,3) = tb;
-    figure, imagesc(tv);
-
+    
+    
+    slice=img(:,:,1); slice(t(1:size(img, 1), 1:size(img, 2))==0)=0; out(:,:,1) = slice;
+    slice=img(:,:,2); slice(t(1:size(img, 1), 1:size(img, 2))==0)=0; out(:,:,2) = slice;
+    slice=img(:,:,3); slice(t(1:size(img, 1), 1:size(img, 2))==0)=0; out(:,:,3) = slice;
 end
+
+
 
 %% Entropy Function Testing
 function entropyImage = entropyExtract(entropyImage, cleanImage)
