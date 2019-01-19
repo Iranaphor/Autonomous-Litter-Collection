@@ -79,6 +79,9 @@ function bg = backgroundExtraction(frames)
 end
 
 
+
+
+
 function [out, hi, bina, filt, dila, slicer] = histeqFind(bg, img)
     out = zeros(size(img));
     
@@ -90,10 +93,14 @@ function [out, hi, bina, filt, dila, slicer] = histeqFind(bg, img)
     
     slice=img(:,:,1); slice(~slicer)=0; out(:,:,1) = slice;
     slice=img(:,:,2); slice(~slicer)=0; out(:,:,2) = slice;
-    slice=img(:,:,3); out(:,:,3) = slice;
+    slice=img(:,:,3); slice(~slicer)=0; out(:,:,3) = slice;
     
     hi = 0;
 end
+
+
+
+
 
 %Can detect changes in texture (not my bottle on 1C floor)
 %better when histogram equaised: imagesc(~histeq(im1./max(max(im1))) + ~histeq(im2./max(max(im1))))
