@@ -61,8 +61,8 @@ f_histeqFind = @histeqFind;
 
 %% Foreground Extraction Methods
 
-bg = backgroundExtraction(frames);
-im = histeq(frames(:,:,:,12));
+% bg = backgroundExtraction(frames);
+% im = histeq(frames(:,:,:,12));
 subplot(2, 2, 1); imagesc(bg); axis image
 subplot(2, 2, 2); imagesc(im); axis image
 subplot(2, 1, 2); imagesc(histeqFind(bg, im)); axis image
@@ -83,13 +83,14 @@ function [out, hi, bina, filt, dila, slicer] = histeqFind(bg, img)
     out = zeros(size(img));
     
     a = rgb2gray(histeq(img)) - rgb2gray(histeq(bg));
-    bina = imbinarize(a, 0.3);
+%     b = a + abs(min(min(a)));
+    bina = imbinarize(abs(a), 0.3);
     filt = medfilt2(bina, [5 5]);
     dila = imdilate(filt, ones(15));
     slicer = imerode(dila, ones(10));
     
-    slice=img(:,:,1); slice(~slicer)=0; out(:,:,1) = slice;
-    slice=img(:,:,2); slice(~slicer)=0; out(:,:,2) = slice;
+    slice=img(:,:,1); slice(~slicer)=1; out(:,:,1) = slice;
+    slice=img(:,:,2); slice(~slicer)=0.27; out(:,:,2) = slice;
     slice=img(:,:,3); out(:,:,3) = slice;
     
     hi = 0;
