@@ -7,20 +7,20 @@
 
 
 
-% 
+%
 % f_entropyGroup = @entropyGroup;
 % f_entropySig = @entropySig;
 % f_entropyCompare = @entropyCompare;
-% 
+%
 
 % CCS = @cameraControlSystem;
 % f_camSetup = @camSetup;
 % f_camStart= @camStart;
-% 
-% 
+%
+%
 % f_readIMGs = @readIMGs;
-% 
-% 
+%
+%
 % f_frameUpdate = @frameUpdate;
 
 BGE = @backgroundExtraction;
@@ -61,8 +61,8 @@ f_histeqFind = @histeqFind;
 
 %% Foreground Extraction Methods
 
-bg = backgroundExtraction(frames);
-im = histeq(frames(:,:,:,12));
+% bg = backgroundExtraction(frames);
+% im = histeq(frames(:,:,:,12));
 subplot(2, 2, 1); imagesc(bg); axis image
 subplot(2, 2, 2); imagesc(im); axis image
 subplot(2, 1, 2); imagesc(histeqFind(bg, im)); axis image
@@ -70,11 +70,11 @@ subplot(2, 1, 2); imagesc(histeqFind(bg, im)); axis image
 
 
 function bg = backgroundExtraction(frames)
-    
+
     for i = 1:size(frames, 4)
         frames(:,:,:,i) = histeq(frames(:,:,:,i));
     end
-    
+
     bg = mode(frames, 4);
 end
 
@@ -84,17 +84,18 @@ end
 
 function [out, hi, bina, filt, dila, slicer] = histeqFind(bg, img)
     out = zeros(size(img));
-    
+
     a = rgb2gray(histeq(img)) - rgb2gray(histeq(bg));
-    bina = imbinarize(a, 0.3);
+%     b = a + abs(min(min(a)));
+    bina = imbinarize(abs(a), 0.3);
     filt = medfilt2(bina, [5 5]);
     dila = imdilate(filt, ones(15));
     slicer = imerode(dila, ones(10));
-    
-    slice=img(:,:,1); slice(~slicer)=0; out(:,:,1) = slice;
-    slice=img(:,:,2); slice(~slicer)=0; out(:,:,2) = slice;
-    slice=img(:,:,3); slice(~slicer)=0; out(:,:,3) = slice;
-    
+
+    slice=img(:,:,1); slice(~slicer)=1; out(:,:,1) = slice;
+    slice=img(:,:,2); slice(~slicer)=0.27; out(:,:,2) = slice;
+    slice=img(:,:,3); out(:,:,3) = slice;
+
     hi = 0;
 end
 
@@ -111,8 +112,8 @@ function [out, im1, im2] = entropyComparison(bg, img)
     im2 = entropySig(double(img),r);
     t = im1 - im2;
     t(t < 0.96)=0;
-    
-    
+
+
     slice=img(:,:,1); slice(t(1:size(img, 1), 1:size(img, 2))==0)=0; out(:,:,1) = slice;
     slice=img(:,:,2); slice(t(1:size(img, 1), 1:size(img, 2))==0)=0; out(:,:,2) = slice;
     slice=img(:,:,3); slice(t(1:size(img, 1), 1:size(img, 2))==0)=0; out(:,:,3) = slice;
@@ -133,7 +134,7 @@ function [objOut, labels] = entropyCompare(bgEntropy, imgEntropy)
         t1(labels ~= i) = 0;
         objOut(:,:,i) = t1;
     end
-    
+
 end
 
 function background = entropyBG(frames)
@@ -147,7 +148,7 @@ function SIGs = entropyGroup(images)
     fprintf('Generate All Entropy Signatures\n');
     entropyRadius = 10;
     for i = 1:size(images, 4)
-        tic; 
+        tic;
         SIGs(:,:,i) = entropySig(rgb2gray(images(:,:,:,i)), entropyRadius);
         fprintf(i + "/" + size(images, 4) + " - ");
         toc;
@@ -157,10 +158,10 @@ end
 function SIG = entropySig(IMAGE, RADIUS)
     fprintf('Generate Entropy Signature\n');
     r = RADIUS;
-    
+
     PaddIMAGE = padarray(IMAGE, [r r]);
- 
-    
+
+
     SIG = zeros(floor(size(IMAGE, 1)/r), floor(size(IMAGE, 2)/r));
     for i = 1:r:size(IMAGE, 1)
         for j = 1:r:size(IMAGE, 2)
@@ -197,11 +198,11 @@ end
 %dir('images\yacht_images\*.PNG')
 function images = readIMGs(subfolder, fileType)
     fprintf('Reading Snapshots\n');
-    
+
     baseDir = dir;
     cd(baseDir(3).folder + "\images\" + subfolder);
     FGEDir = dir;
-    
+
     for i = 3:size(FGEDir,1)
         nom = flip(FGEDir(i).name);
         if size(nom,2) > 3
@@ -240,5 +241,5 @@ function [labels, objects] = findFG(img, bg)
         t1( labels ~= i ) = 0;
         objects(:,:,i) = t1;
     end
-    
+
 end
