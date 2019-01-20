@@ -15,7 +15,7 @@
 
 % CCS = @cameraControlSystem;
 % f_camSetup = @camSetup;
-% f_camStart= @camStart;
+f_camStart= @camStart;
 %
 %
 % f_readIMGs = @readIMGs;
@@ -24,16 +24,19 @@
 % f_frameUpdate = @frameUpdate;
 
 BGE = @backgroundExtraction;
-% % f_findBG = @findBG_OLD;
+% %f_findBG = @findBG_OLD;
 % f_entropyBG = @entropyBG;
 
 
 % FGE = @foregroundExtraction;
+hFind = @hFindBase;
 f_histeqFind = @histeqFind;
 % f_entropyComparison = @entropyComparison;
 % f_findFG = @findFG;
 
 
+
+dR = @displayAllRegion;
 
 %%
 
@@ -57,44 +60,141 @@ f_histeqFind = @histeqFind;
 % pause(0.1); bgEntropy = f_entropyBG(frameEntropy);
 % pause(0.1); [objs, lbl] = f_entropyCompare(bgEntropy, frameEntropy(:,:,1));
 
+% bg = backgroundExtraction(frames);
+% im = histeq(frames(:,:,:,12));
+% subplot(2, 2, 1); imagesc(bg); axis image
+% subplot(2, 2, 2); imagesc(im); axis image
+% subplot(2, 1, 2); imagesc(histeqFind(bg, im)); axis image
+
+
+% bg2 = BGE(images);
+% out = hFind(bg2, imn);
+% figure;
+% subplot(1, 3, 1), imagesc(bg2(640:700, 340:430, :)); title('BG2'); axis image
+% subplot(1, 3, 2), imagesc(imn(640:700, 340:430, :)); title('IMN'); axis image
+% subplot(1, 3, 3), imagesc(out(640:700, 340:430, :)); title('OUT'); axis image
 
 
 %% Foreground Extraction Methods
 
-% bg = backgroundExtraction(frames);
-% im = histeq(frames(:,:,:,12));
-subplot(2, 2, 1); imagesc(bg); axis image
-subplot(2, 2, 2); imagesc(im); axis image
-subplot(2, 1, 2); imagesc(histeqFind(bg, im)); axis image
+
+% out_1 = hFind(bg, image_1);
+% figure,
+% subplot(2, 2, 1); imagesc(bg(600:700, 400:600, :)); axis image;
+% subplot(2, 2, 2); imagesc(image_1(600:700, 400:600, :)); axis image;
+% subplot(2, 2, 3); imagesc(out_1(600:700, 400:600, :)); axis image;
+% subplot(6, 2, 8); h1r = histogram(out_1(600:700, 400:600, 1)); hV1r = h1r.Values; hV1r = hV1r(2:size(hV1r, 2));
+% xlim([min(min(out_1(out_1>0))) 1]); ylim([0 max(hV1r)])
+% subplot(6, 2, 10); h1g = histogram(out_1(600:700, 400:600, 2)); hV1g = h1g.Values; hV1g = hV1g(2:size(hV1g, 2));
+% xlim([min(min(out_1(out_1>0))) 1]); ylim([0 max(hV1g)])
+% subplot(6, 2, 12); h1b = histogram(out_1(600:700, 400:600, 3)); hV1b = h1b.Values; hV1b = hV1b(2:size(hV1b, 2));
+% xlim([min(min(out_1(out_1>0))) 1]); y lim([0 max(hV1b)])
+% 
+% out_2 = hFind(bg, image_2);
+% figure,
+% subplot(2, 2, 1); imagesc(bg(600:700, 400:600, :)); axis image;
+% subplot(2, 2, 2); imagesc(image_2(600:700, 400:600, :)); axis image;
+% subplot(2, 2, 3); imagesc(out_2(600:700, 400:600, :)); axis image;
+% subplot(6, 2, 8); h2r = histogram(out_2(600:700, 400:600, 1)); hV2r = h2r.Values; hV2r = hV2r(2:size(hV2r, 2));
+% xlim([min(min(out_2(out_2>0))) 1]); ylim([0 max(hV2r)])
+% subplot(6, 2, 10); h2g = histogram(out_2(600:700, 400:600, 2)); hV2g = h2g.Values; hV2g = hV2g(2:size(hV2g, 2));
+% xlim([min(min(out_2(out_2>0))) 1]); ylim([0 max(hV2g)])
+% subplot(6, 2, 12); h2b = histogram(out_2(600:700, 400:600, 3)); hV2b = h2b.Values; hV2b = hV2b(2:size(hV2b, 2));
+% xlim([min(min(out_2(out_2>0))) 1]); ylim([0 max(hV2b)])
+
+
+
+a = bottl(170:520,290:400,:); a = imresize(a, 0.03);
+subplot(3, 2, 1), imagesc(a); axis image
+subplot(9, 2, 2); hr = histogram(a(:, :, 1),5); hVr = hr.Values; hVr = hVr(2:size(hVr, 2)); xlim([min(min(a(a>0))) 1]); ylim([0 max(hVr)])
+subplot(9, 2, 4); hg = histogram(a(:, :, 2),5); hVg = hg.Values; hVg = hVg(2:size(hVg, 2)); xlim([min(min(a(a>0))) 1]); ylim([0 max(hVg)])
+subplot(9, 2, 6); hb = histogram(a(:, :, 3),5); hVb = hb.Values; hVb = hVb(2:size(hVb, 2)); xlim([min(min(a(a>0))) 1]); ylim([0 max(hVb)])
+
+a = bottlnCUP(125:520,290:400,:); a = imresize(a, 0.03);
+subplot(3, 2, 3), imagesc(a); axis image
+subplot(9, 2, 8); hr = histogram(a(:, :, 1),5); hVr = hr.Values; hVr = hVr(2:size(hVr, 2)); xlim([min(min(a(a>0))) 1]); ylim([0 max(hVr)])
+subplot(9, 2,10); hg = histogram(a(:, :, 2),5); hVg = hg.Values; hVg = hVg(2:size(hVg, 2)); xlim([min(min(a(a>0))) 1]); ylim([0 max(hVg)])
+subplot(9, 2,12); hb = histogram(a(:, :, 3),5); hVb = hb.Values; hVb = hVb(2:size(hVb, 2)); xlim([min(min(a(a>0))) 1]); ylim([0 max(hVb)])
+
+
+out = f_histeqFind(bg, image_2, 0.1, 5, 15, 15);
+a = histeq(histeq(out(656:659,506:514,:)));
+subplot(3, 2, 5), imagesc(a); axis image %a(:, :, 1) where sum(a)>0 {should use to reomve black pixels (or work from bina?)}
+subplot(9, 2,14); hr = histogram(a(:, :, 1),5); hVr = hr.Values; hVr = hVr(2:size(hVr, 2)); xlim([min(min(a(a>0))) 1]); ylim([0 max(hVr)])
+subplot(9, 2,16); hg = histogram(a(:, :, 2),5); hVg = hg.Values; hVg = hVg(2:size(hVg, 2)); xlim([min(min(a(a>0))) 1]); ylim([0 max(hVg)])
+subplot(9, 2,18); hb = histogram(a(:, :, 3),5); hVb = hb.Values; hVb = hVb(2:size(hVb, 2)); xlim([min(min(a(a>0))) 1]); ylim([0 max(hVb)])
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 function bg = backgroundExtraction(frames)
-
     for i = 1:size(frames, 4)
         frames(:,:,:,i) = histeq(frames(:,:,:,i));
     end
-
     bg = mode(frames, 4);
 end
 
 
+function displayAllRegion(frames, y1, y2,x1, x2, hE)
+
+    %Polymorphism for optional values
+    if ~exist('x1', 'var'), x1 = 1; end
+    if ~exist('x2', 'var'), x2 = size(frames, 2); end
+    if ~exist('y1', 'var'), y1 = 1; end
+    if ~exist('y2', 'var'), y2 = size(frames, 1); end
+    if ~exist('hE', 'var'), hE = 0; end
+
+    %Format subplot size
+    d = divisors(size(frames, 4)); 
+    dx = d(floor(size(d, 2)/2)); dy = d(floor(size(d, 2)/2)+1);
+    if floor(sqrt(size(frames, 4))) == sqrt(size(frames, 4)), dx = dy; end
+    
+    %Plot hist_equalized or not
+    if ~hE
+        for i = 1:size(frames, 4)
+            subplot(dx, dy, i); imagesc(frames(y1:y2, x1:x2, :, i)); axis image
+        end
+    else
+        for i = 1:size(frames, 4)
+            subplot(dx, dy, i); imagesc(histeq(frames(y1:y2, x1:x2, :, i))); axis image
+        end
+    end
+end
 
 
+function out = hFindBase(bg, img)
+    out = histeqFind(bg, img);
+end
 
-function [out, hi, bina, filt, dila, slicer] = histeqFind(bg, img)
+
+function [out, hi, bina, filt, dila, slicer] = histeqFind(bg, img, th, fi, di, er)
     out = zeros(size(img));
 
+    if ~exist('th', 'var'), th = 0.1; end
+    if ~exist('fi', 'var'), fi = 5; end
+    if ~exist('di', 'var'), di = 15; end
+    if ~exist('er', 'var'), er = 10; end
+    
+    
     a = rgb2gray(histeq(img)) - rgb2gray(histeq(bg));
-%     b = a + abs(min(min(a)));
-    bina = imbinarize(abs(a), 0.3);
-    filt = medfilt2(bina, [5 5]);
-    dila = imdilate(filt, ones(15));
-    slicer = imerode(dila, ones(10));
-
-    slice=img(:,:,1); slice(~slicer)=1; out(:,:,1) = slice;
-    slice=img(:,:,2); slice(~slicer)=0.27; out(:,:,2) = slice;
-    slice=img(:,:,3); out(:,:,3) = slice;
+    bina = imbinarize(abs(a), th);
+    filt = medfilt2(bina, [fi fi]);
+    dila = imdilate(filt, ones(di));
+    slicer = imerode(dila, ones(er));
+    img = histeq(img);
+    slice=img(:,:,1); slice(~slicer)=0; out(:,:,1) = slice;
+    slice=img(:,:,2); slice(~slicer)=0; out(:,:,2) = slice;
+    slice=img(:,:,3); slice(~slicer)=0; out(:,:,3) = slice;
 
     hi = 0;
 end
@@ -190,7 +290,7 @@ function frames = camStart(obj, inc, pau)
     for i = 1:inc
         pause(pau); frames(:,:,:,i) = step(obj);
         %imwrite(frame(:,:,:,i), i + ".png");
-        disp("IMAGE " + i);
+        disp("IMAGE " + i + "/" + inc);
     end
 end
 
@@ -243,3 +343,34 @@ function [labels, objects] = findFG(img, bg)
     end
 
 end
+
+
+
+
+
+
+
+
+
+%% SCRAP
+
+% for i = 1:1000, pause(0.2); 
+%     a = floor(rand(1, 1000).*3)-1; 
+%     a(1) = 0; a(a>1)=1;
+%     subplot(1, 4, 1:3), line(cumsum(a), 1:size(a, 2)); 
+%     subplot(1, 4, 4), scatter(a, 1:size(a, 2)); 
+% end
+ 
+
+
+
+% row = 123;
+% col = 925689756987567846565467846565478663;
+% 
+% out = nan(1, row);
+% for i=flip(1:row)
+%     out(1, i) = mod(col, 3);
+%     col = floor(col / 3); 
+% end
+% 
+% disp(out-1);
