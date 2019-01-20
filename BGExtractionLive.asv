@@ -160,15 +160,18 @@ function displayAllRegion(frames, y1, y2,x1, x2, hE)
     if floor(sqrt(size(frames, 4))) == sqrt(size(frames, 4)), dx = dy; end
     
     %Plot hist_equalized or not
-
+    bg = mode(frames, 4);
+    
+    
+    
     if ~hE
         for i = 1:size(frames, 4)
-            subplot(dx, dy, i); imagesc(frames(y1:y2, x1:x2, :, i)); axis image
+            subplot(dx, dy, i); imagesc(bg(y1:y2, x1:x2, :) - frames(y1:y2, x1:x2, :, i)); axis image
         end
-    else
-        for i = 1:size(frames, 4)
-            subplot(dx, dy, i); imagesc(histeq(frames(y1:y2, x1:x2, :, i))); axis image
-        end
+%     else
+%         for i = 1:size(frames, 4)
+%             subplot(dx, dy, i); imagesc(bg(frames(y1:y2, x1:x2, :)) - histeq(frames(y1:y2, x1:x2, :, i))); axis image
+%         end
     end
 end
 
@@ -184,24 +187,20 @@ function [out, hi, bina, filt, dila, slicer] = histeqFind(bg, img, th, fi, di, e
     if ~exist('th', 'var'), th = 0.1; end
     if ~exist('fi', 'var'), fi = 5; end
     if ~exist('di', 'var'), di = 15; end
-    if ~exist('er', 'var'), er = 15; end
+    if ~exist('er', 'var'), er = 10; end
     
     
     a = rgb2gray(histeq(img)) - rgb2gray(histeq(bg));
     bina = imbinarize(abs(a), th);
     filt = medfilt2(bina, [fi fi]);
-    dila = imfill(imdilate(filt, ones(di)), 'holes');
+    dila = imdilate(filt, ones(di));
     slicer = imerode(dila, ones(er));
-    
     img = histeq(img);
     slice=img(:,:,1); out(:,:,1) = slice;
     slice=img(:,:,2); slice(~slicer)=.29; out(:,:,2) = slice;
     slice=img(:,:,3); out(:,:,3) = slice;
 
     hi = 0;
-    
-%     figure, imagesc(4*slicer - (3*dila - (2*filt - bina)));
-    
 end
 
 
