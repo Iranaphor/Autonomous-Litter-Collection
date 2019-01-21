@@ -128,14 +128,93 @@ dR = @displayAllRegion;
 
 
 
+%%
+fullAnalysis(b, labl);
+% % objAnalysis(b, labl, 15);
+
+%%
+function fullAnalysis(imaggge, labl)
+%% Segment and sort labelled image
+    for i = 1:max(max(labl))
+        f(i) = sum(sum(labl==i)); 
+    end
+
+    [B, I] = sort(f);
+
+%     %display each image
+%     for i = flip(I)
+%         im = rgb2gray(imaggge); im(labl~=i)=0; 
+%         imagesc(im); title(i); pause(1); axis image
+%     end
+
+%% Analyse each in turn
+
+    sizesList = flip(I);
+    for m = 1:size(I, 2)
+        ip = sizesList(m);
+        if sum(sum(labl==ip)) > 20
+            objAnalysis(imaggge, labl, ip);
+            disp(ip);
+            figure
+%             pause(10);
+            
+        end
+    end
+
+end
 
 
+function objAnalysis(image, labels, id, plots)
+    
+    %Polymorphism for optional values
+    if ~exist('plots', 'var'), plots = 0; end
+    
+
+    ip = id;
+    rp = regionprops(labels==ip, 'all');
+    bb = ceil(rp.BoundingBox);
+    im = image;
+    
+    for k = 1:3
+        sd=im(:,:,k); sd(labels~=ip)=0; im(:,:,k) = sd; 
+    end
+    
+    ou = im(bb(2):bb(2)+bb(4)-1, bb(1):bb(1)+bb(3)-1, :);
+    subplot(2, 1, 1); imagesc(ou); title(id); axis image;
+    ou(ou==0) = NaN;
+    ou2 = smoothdata(sort(ou));
+    if plots == 1
+        subplot(2, 1, 2); hs = histogram(ou2); plot(smoothdata(hs.Values.*(1000/max(hs.Values))));
+    else
+        subplot(6, 1, 4); hs = histogram(ou2(:,:,1)); plot(smoothdata(hs.Values.*(1000/max(hs.Values))));
+        title(rp.Eccentricity);
+        subplot(6, 1, 5); hs = histogram(ou2(:,:,2)); plot(smoothdata(hs.Values.*(1000/max(hs.Values))));
+        subplot(6, 1, 6); hs = histogram(ou2(:,:,3)); plot(smoothdata(hs.Values.*(1000/max(hs.Values))));
+    end
+end
 
 
+function regionActivity(frames)
+    
+    for i = 1:size(frames, 4)
+        frames(:,:,:,1) = histeq(frames(:,:,:,i));
+    end
+    
+    for i = 1:size(frames, 1)
+        for j = 1:size(frames, 2)
+            for k = 1:size(frames, 3)
+                aft(i, j, k) = size(unique(frames(i, j, k, :)), 1); 
+            end
+        end
+    end
+    
+    
+    subplot(2, 2, 1), imagesc(mode(frames, 4)); axis image; title('Mode Image');
+    subplot(2, 2, 2), imagesc(aft(:,:,1)); axis image; title('Unique Counts (Region Activity)');
+    subplot(2, 2, 3), imagesc(aft(:,:,2)); axis image;
+    subplot(2, 2, 4), imagesc(aft(:,:,3)); axis image;
 
-
-
-
+end
 
 function bg = backgroundExtraction(frames)
     for i = 1:size(frames, 4)
@@ -178,7 +257,7 @@ function out = hFindBase(bg, img)
 end
 
 
-function [out, hi, bina, filt, dila, slicer] = histeqFind(bg, img, th, fi, di, er)
+function [out, hi, bina, filt, dila, slicer, labl] = histeqFind(bg, img, th, fi, di, er)
     out = zeros(size(img));
 
     if ~exist('th', 'var'), th = 0.1; end
@@ -192,6 +271,7 @@ function [out, hi, bina, filt, dila, slicer] = histeqFind(bg, img, th, fi, di, e
     filt = medfilt2(bina, [fi fi]);
     dila = imfill(imdilate(filt, ones(di)), 'holes');
     slicer = imerode(dila, ones(er));
+    labl = bwlabel(slicer);
     
     img = histeq(img);
     slice=img(:,:,1); out(:,:,1) = slice;
