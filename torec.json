@@ -1,0 +1,14 @@
+{
+  "responses": [
+    {
+      "labelAnnotations": [
+        {
+          "mid": "/m/0bt9lr",
+          "description": "Dog",
+          "score": 0.9953705,
+          "topicality": 0.9953705
+        }
+      ]
+    }
+  ]
+}

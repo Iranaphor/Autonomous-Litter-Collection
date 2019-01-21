@@ -125,12 +125,41 @@ dR = @displayAllRegion;
 % subplot(9, 2,18); hb = histogram(a(:, :, 3),5); hVb = hb.Values; hVb = hVb(2:size(hVb, 2)); xlim([min(min(a(a>0))) 1]); ylim([0 max(hVb)])
 % 
 % 
+%%
+% node index C:/Users/Student/Desktop/Autonomous-Litter-Collection/b-c.png C:/Users/Student/Desktop/tosend.json
+% node <- progrma
+% index <= file name of script to run
+% param3 <- input image
+% param4 <- output file to send to google cloud
 
+% curl -v -s -H "Content-Type: application/json" https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDATQnGymR48ti77-_ru3F8BywvXBtHw2E --data-binary @tosend.json > torec.json
+% curl -v -s -H "Content-Type: application/json" https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDATQnGymR48ti77-_ru3F8BywvXBtHw2E --data-binary <- ensures request for analysis is correct/to correct url
+% @tosend.json <- the data to be sent, same file as param4
+% > torec.json <- the analysed image 
 
 
 %%
-fullAnalysis(b, labl);
+% fullAnalysis(b, labl);
 % % objAnalysis(b, labl, 15);
+
+%%
+
+sendReq("demo-image.png", "tosend.json", "torec.json");
+% sendReq("imageCompare/b-c.png", "tosend.json", "torec.json");
+
+function sendReq(imDir, sendJson, outFile)
+    
+%     node index C:/Users/Student/Desktop/Autonomous-Litter-Collection/b-c.png C:/Users/Student/Desktop/tosend.json
+    send = "node index " + cd + '/' + imDir + " " + cd + '/' + sendJson;
+    system(send);
+    
+%     curl -v -s -H "Content-Type: application/json" https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDATQnGymR48ti77-_ru3F8BywvXBtHw2E --data-binary @tosend.json > torec.json
+    send2 = 'curl -v -s -H "Content-Type: application/json" https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDATQnGymR48ti77-_ru3F8BywvXBtHw2E --data-binary @' + sendJson + ' > ' + outFile;
+    system(send2);
+    
+    
+end
+
 
 %%
 function fullAnalysis(imaggge, labl)
