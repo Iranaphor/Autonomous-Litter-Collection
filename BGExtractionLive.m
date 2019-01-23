@@ -144,11 +144,13 @@ dR = @displayAllRegion;
 
 %%
 
-sendReq("demo-image.png", "tosend.json", "torec.json");
-% sendReq("imageCompare/b-c.png", "tosend.json", "torec.json");
+% sendReq("demo-image.png", "torec.json");
+% sendReq("imageCompare/b-c.png", "torec.json");
 
-function sendReq(imDir, sendJson, outFile)
+function sendReq(imDir, outFile)
     
+    sendJson = "tosend.json";
+
 %     node index C:/Users/Student/Desktop/Autonomous-Litter-Collection/b-c.png C:/Users/Student/Desktop/tosend.json
     send = "node index " + cd + '/' + imDir + " " + cd + '/' + sendJson;
     system(send);
