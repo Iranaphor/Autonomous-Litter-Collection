@@ -1,0 +1,11 @@
+This file runs the system.
+
+It needs to open the infinate bg process of downloading the files from the server, and the fg process of forever analysing fg images for updates.
+
+1. download_updates.m
+----this file creates a bg.jpeg image with the image set, downloads a new image every minute and replaces the oldest image with the new image and must save the id of the latest image in a txt file
+[fileIO is expensive, just leave the images in memory]
+
+
+2. analysis system
+----this file compares the latest image with the background image every minute, extracts the objects and saves the 
