@@ -125,6 +125,7 @@ dR = @displayAllRegion;
 % subplot(9, 2,18); hb = histogram(a(:, :, 3),5); hVb = hb.Values; hVb = hVb(2:size(hVb, 2)); xlim([min(min(a(a>0))) 1]); ylim([0 max(hVb)])
 % 
 % 
+
 %%
 % node index C:/Users/Student/Desktop/Autonomous-Litter-Collection/b-c.png C:/Users/Student/Desktop/tosend.json
 % node <- progrma
