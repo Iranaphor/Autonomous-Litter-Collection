@@ -8,22 +8,22 @@ function download_updates()
     frameURL = 'http://james.yourthought.co.uk/frame.png';
 	
 	%% Step A: load older images from files
-    fprintf("\n\nLoad Existing Images:\n");
+    disp("Load Existing Images:");
     
     disp("    Get image dimensions");
     urlFail = true;
     while (urlFail == true)
         try
-            fprintf("    Try frameURL:     ...");
+            fprintf("    Try frameURL ");
             frm = imread(frameURL);
             urlFail = false;
         catch ERR
             if(strcmp(ERR.identifier,'MATLAB:imagesci:imread:urlRead'))
-                fprintf("\b\b\b" + ERR.identifier + "\n");
+                fprintf("    " + ERR.identifier + "\n");
             end
         end
     end
-    fprintf("\b\b\bImage Acquired\n");
+    fprintf("    Image Acquired\n");
     
     
     fprintf("    Set frame holder size\n");
@@ -40,7 +40,7 @@ function download_updates()
 	
     %% Step B: Load the value for the oldest image
     
-    fprintf("\n\nFind oldest image in set\n");
+    disp("Find oldest image in set");
     if isfile([imPath, '_old.txt'])
         fileID = fopen([imPath, '_old.txt'],'r');
         oldestImID = fscanf(fileID,'%f');
@@ -48,64 +48,62 @@ function download_updates()
     else
         oldestImID = 1;
     end
-    disp("    Begin system at frame - " + int2str(oldestImID));
+    disp("    Begin system at frame " + int2str(oldestImID));
     
     
 	%% Step C: download and process updates
-    fprintf("\n\nLoop Begun:\n")
+    disp("Loop Begun:")
 	while true
-        disp("    Performing Analysis on Image " + int2str(oldestImID));
+        
         
 		% Step 0: time length of processings
         fprintf("    Timer started\n");
 		startLoopTimer = tic;
+        disp(oldestImID);
 		
         
 		% Step 1: download newest frame
         urlFail = true;
         while (urlFail == true)
             try
-                fprintf("    Try frameURL:     ...");
+                fprintf("    Try frameURL ");
                 frames(:,:,:,oldestImID) = imread(frameURL);
                 urlFail = false;
             catch ERR
-%                 if(strcmp(ERR.identifier,'MATLAB:imagesci:imread:urlRead'))
-                fprintf("\b\b\b" + ERR.identifier + "\n");
-%                 end
+                if(strcmp(ERR.identifier,'MATLAB:imagesci:imread:urlRead'))
+                    fprintf("    " + ERR.identifier + "\n");
+                end
             end
         end
-        fprintf("\b\b\bImage Acquired\n");
+        fprintf("    Image Acquired\n");
         
         
 		% Step 2: save image to jpeg file
-        disp("    Updating local version of image")
+        disp("Saving image")
 		imwrite(frames(:,:,:,oldestImID), [imPath, 'frame', int2str(oldestImID), '.png']);
 		
 		
-        % Step 3: generate and save the bg image
-        disp("    Saving background image");
- 		imwrite(mode(frames, 4), [imPath, '_bg.jpeg']);
-		
-		
-        % Step 4: save ID of new oldest to txt file
-        fprintf("    New oldestImID: ");
+        % Step 3: save ID of new oldest to txt file
+        disp("    Update oldest ID");
 		oldestImID = oldestImID + 1;
 		if oldestImID > totalIm, oldestImID = 1; end
-        disp(int2str(oldestImID));
         
         
-        % Step 5: add oldest image ID to file
-        disp("    Log oldestImID");
+        % Step 4: add oldest image ID to file
+        disp("    Save new oldest ID - " + int2str(oldestImID));
  		fileID = fopen([imPath, '_old.txt'],'w'); 
         fprintf(fileID, int2str(oldestImID)); 
         fclose(fileID);
-        
+		
+		
+        % Step 5: generate and save the bg image
+ 		imwrite(mode(frames, 4), [imPath, '_bg.jpeg']);
+		
 		
         % Step 6: pause till the server image updates
-        fprintf("    Timer end - (")
         loopTime = toc(startLoopTimer);
 		if loopTime < pauseTime, pause(pauseTime-loopTime); end
-        fprintf(loopTime + ")\n\n");
+        disp(loopTime)
         
         
 	end
