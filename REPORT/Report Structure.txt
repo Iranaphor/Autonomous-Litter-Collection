@@ -1,0 +1,30 @@
+Part A: Introduction and Background
+	Chapter 1: Introduction to Domain
+	Chapter 2: Background Domain Research
+
+Part B: Methodology Planning
+	Chapter 3: Wireless Surveillance System and File Transfer
+		Define requirements for the sub-system
+		Research methods to set up the sub-system
+		Design the sub-system using the best method
+		Test effectiveness of systems researched in context
+		Build the most appropriate
+		Evaluate the efficacy of the sub-system
+
+	Chapter 4: Background and Foreground Extraction
+	Chapter 5: Object Identification and Litter Filter
+	Chapter 6: SLAM Implementation
+	Chapter 7: Robot Development/Build
+	Chapter 8: Robot Communiation & Movement Systems
+
+Part C: Conclusion
+	Chapter 9: Evaluation through Metrics
+	Chapter 10: Achieving the Aim
+	Chpater 11: Changes to the Development
+
+Part D: Reflective Analysis
+	Chapter 12: WWW & EBI
+	Chapter 13: Further Research / Research Limitations
+
+Part E: References
+	

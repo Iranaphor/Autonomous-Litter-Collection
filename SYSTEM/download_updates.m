@@ -82,6 +82,8 @@ function download_updates() %% Function Setup:
         % Step 3: generate and save the bg image
         disp("    Saving background image");
  		imwrite(mode(frames, 4), [imPath, '_bg.jpeg']);
+		%imwrite(mean(frames, 4), [imPath, '_bg.jpeg']);
+		%imwrite(median(frames, 4), [imPath, '_bg.jpeg']);
 		
 		
         % Step 4: save ID of new oldest to txt file

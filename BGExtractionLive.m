@@ -18,7 +18,7 @@
 f_camStart= @camStart;
 %
 %
-% f_readIMGs = @readIMGs;
+f_readIMGs = @readIMGs;
 %
 %
 % f_frameUpdate = @frameUpdate;
@@ -48,7 +48,7 @@ dR = @displayAllRegion;
 % pause(0.1); imagesc(bg)
 
 
-% images = f_readIMGs("beachIMG", ".jpg");
+images = f_readIMGs("beachIMG", ".jpg");
 % pause(0.1); images = readIMGs("yacht_images", ".PNG");
 % pause(0.1); bg = findBG(images);
 % pause(0.1); imagesc(bg);
