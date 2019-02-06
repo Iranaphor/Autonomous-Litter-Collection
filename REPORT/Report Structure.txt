@@ -1,30 +1,142 @@
+Part ~: 
+	Title Page
+	Acknowledgements
+	Abstract
+
+
 Part A: Introduction and Background
 	Chapter 1: Introduction to Domain
 	Chapter 2: Background Domain Research
 
-Part B: Methodology Planning
-	Chapter 3: Wireless Surveillance System and File Transfer
-		Define requirements for the sub-system
-		Research methods to set up the sub-system
-		Design the sub-system using the best method
-		Test effectiveness of systems researched in context
-		Build the most appropriate
-		Evaluate the efficacy of the sub-system
 
-	Chapter 4: Background and Foreground Extraction
-	Chapter 5: Object Identification and Litter Filter
-	Chapter 6: SLAM Implementation
-	Chapter 7: Robot Development/Build
-	Chapter 8: Robot Communiation & Movement Systems
+Part B: Methodology Setup
 
-Part C: Conclusion
-	Chapter 9: Evaluation through Metrics
-	Chapter 10: Achieving the Aim
-	Chpater 11: Changes to the Development
 
-Part D: Reflective Analysis
-	Chapter 12: WWW & EBI
-	Chapter 13: Further Research / Research Limitations
+	Chapter 3: Project Management
+		What PM methodology?
+		Why - linking to context?
+		Use of gantt chart? (Kanban/SCRUMBoard?)
+			-For time management
+			-Setting weekly objectives
+			-Based on priority
+			-Revised gantt chart half way through project to factor in new risks and issues with timings
 
-Part E: References
+
+	Chapter 4: Software Development Life Cycle
+		How ensure all aims are met?
+		What SE Methodology is most appropriate for context?
+		Ensure system is fit for evaluation?
+			-using hybrid of agile, where components are built off of each other
+
+
+	Chapter 5: Methodology Planning
+		Sub-System 1: Wireless Surveillance System and File Transfer
+
+			Step 1: Research tools and methods to set up the sub-system
+			Step 2: Define appropriate evaluation systems
+			
+			Step 3: Define requirements for the sub-system
+			Step 4: Design the sub-system using the best method
+			Step 5: Test effectiveness of systems researched in context
+			Step 6: Build the most appropriate
+			
+			Step 7: Evaluate the efficacy of the sub-system
+				+ comparison with Step 1-2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		Sub-System 2: Background and Foreground Extraction
+			Step 1: Research tools and methods to set up the sub-system
+			Step 2: Define appropriate evaluation systems
+			
+			Step 3: Define requirements for the sub-system
+			Step 4: Design the sub-system using the best method
+			Step 5: Test effectiveness of systems researched in context
+			Step 6: Build the most appropriate
+			
+			Step 7: Evaluate the efficacy of the sub-system
+				+ comparison with Step 1-2
+
+		Sub-System 3: Object Identification and Litter Filter
+			Step 1: Research tools and methods to set up the sub-system
+			Step 2: Define appropriate evaluation systems
+			
+			Step 3: Define requirements for the sub-system
+			Step 4: Design the sub-system using the best method
+			Step 5: Test effectiveness of systems researched in context
+			Step 6: Build the most appropriate
+			
+			Step 7: Evaluate the efficacy of the sub-system
+				+ comparison with Step 1-2
+
+		Sub-System 4: SLAM Implementation
+			Step 1: Research tools and methods to set up the sub-system
+			Step 2: Define appropriate evaluation systems
+			
+			Step 3: Define requirements for the sub-system
+			Step 4: Design the sub-system using the best method
+			Step 5: Test effectiveness of systems researched in context
+			Step 6: Build the most appropriate
+			
+			Step 7: Evaluate the efficacy of the sub-system
+				+ comparison with Step 1-2
+
+		Sub-System 5: Robot Development/Build
+			Step 1: Research tools and methods to set up the sub-system
+			Step 2: Define appropriate evaluation systems
+			
+			Step 3: Define requirements for the sub-system
+			Step 4: Design the sub-system using the best method
+			Step 5: Test effectiveness of systems researched in context
+			Step 6: Build the most appropriate
+			
+			Step 7: Evaluate the efficacy of the sub-system
+				+ comparison with Step 1-2
+
+		Section 6: Robot Communiation & Movement Systems		
+			Step 1: Research tools and methods to set up the sub-system
+			Step 2: Define appropriate evaluation systems
+			
+			Step 3: Define requirements for the sub-system
+			Step 4: Design the sub-system using the best method
+			Step 5: Test effectiveness of systems researched in context
+			Step 6: Build the most appropriate
+			
+			Step 7: Evaluate the efficacy of the sub-system
+				+ comparison with Step 1-2
+
+(NOT QUITE MEETING 5d OF BRIEF --- CHECK WITH DEREK)
+
+Part D: Conclusion
+	Chapter 6: Does the project Achieve the Aim
+	Chapter 7: Overall Evaluation through Metrics
+	Chpater 8: Changes to the Development
+
+Part E: Reflective Analysis
+	Chapter 9: WWW & EBI
+	Chapter 10: Further Research / Research Limitations
+
+Part F: References
+
+
+
 	
