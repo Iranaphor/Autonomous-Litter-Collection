@@ -8,7 +8,7 @@ THINGS TO DO:
 ###################################
 THINGS TO RESEARCH:
 	- Google Vision API alternatives
-	- types of SLAM {WHAT IS SLAM CALLED WHEN THE CAMERA IS NOT ON THE ROBOT?}
+	- types of SLAM {WHAT IS SLAM CALLED WHEN THE CAMERA IS NOT ON THE ROBOT?} (SLAM is 'simultanious', not 'self')
 	- types of bge
 	- look into how existing surveillance systems deal with their cameras
 	- look into costs of light battery packs for robot and cableless chargers
@@ -26,10 +26,19 @@ Part A: Introduction and Background
 	Chapter 2: Background Domain Research
 
 
-Part B: Methodology Setup	
+Part B: Methodology Setup	 
 	Chapter 3: Project Management
 #		What SE Methodology is most appropriate for context?
-		Why - linking to context?
+			What context is being used?
+				The topic is robot picking up litter...
+				The abstract sense is an autonomous robot responding to entities.
+			How critical would a system like this be?
+				Due to the nature of its implementation, it could be moving around an environment with people or animals around it. Thus it could cause cause some harm to them, or it could pick up items which are not litter causing distress for those around it. However as its failure ot operate would not cuse any serious damage, it would be classed as a non-critical system.
+			As a non-critical system, it would not require as stringent a design methodology, allowing for some variation in design as the system is designed and built.
+
+
+			Why - linking to context?
+
 		Use of gantt chart? (Kanban/SCRUMBoard?)
 			-For time management
 			-Setting weekly objectives
