@@ -33,7 +33,7 @@ Part B: Methodology Setup
 				The topic is robot picking up litter...
 				The abstract sense is an autonomous robot responding to entities.
 			How critical would a system like this be?
-				Due to the nature of its implementation, it could be moving around an environment with people or animals around it. Thus it could cause cause some harm to them, or it could pick up items which are not litter causing distress for those around it. However as its failure ot operate would not cuse any serious damage, it would be classed as a non-critical system.
+				Due to the nature of its implementation, it could be moving around an environment with people or animals around it. Thus it could cause cause some harm to them, or it could pick up items which are not litter causing distress for those around it. However as its failure to operate would not cause any serious damage, it would be classed as a non-critical system.
 			As a non-critical system, it would not require as stringent a design methodology, allowing for some variation in design as the system is designed and built.
 
 
@@ -97,8 +97,8 @@ Part B: Methodology Setup
 				background subtraction could be performed on the stack images
 				found there are multiple ways to do background stacking
 				found mean, which is performing mean operation over the 4th dimension
-				found mean, which is performing median operation over the 4th dimension
-				found mean, which is performing mode operation over the 4th dimension
+				found median, which is performing median operation over the 4th dimension
+				found mode, which is performing mode operation over the 4th dimension
 				found blur detection
 				found fancy methods...
 				found out about backgroud updating? (cant remember what it is called)
@@ -231,7 +231,6 @@ Part B: Methodology Setup
 			Step 7: Evaluate the efficacy of the system
 				+ comparison with Step 1-2
 
-(NOT QUITE MEETING 5d OF BRIEF --- CHECK WITH DEREK)
 
 Part D: Conclusion
 	Chapter 6: Does the project Achieve the Aim
