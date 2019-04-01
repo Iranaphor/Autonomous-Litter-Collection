@@ -1,5 +1,3 @@
-Set up automated downloading of data every minute + bg extraction
-
 Set up automated sending/retrieval to Vision AIP
 
 Test effectiveness of building own Vision ML model
