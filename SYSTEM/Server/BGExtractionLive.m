@@ -15,10 +15,10 @@
 
 % CCS = @cameraControlSystem;
 % f_camSetup = @camSetup;
-f_camStart= @camStart;
+%f_camStart= @camStart;
 %
 %
-f_readIMGs = @readIMGs;
+%f_readIMGs = @readIMGs;
 %
 %
 % f_frameUpdate = @frameUpdate;
@@ -40,7 +40,7 @@ dR = @displayAllRegion;
 
 %%
 
-% pause(0.1); obj = camSetup('winvideo', 2);
+0% pause(0.1); obj = camSetup('winvideo', 2);
 % pause(0.1); preview(obj);
 % pause(0.1); frames = camStart(obj, 20, 1); %Grab 20 images, 1 sec apart from cam "obj"
 % pause(0.1); frames = frameUpdate(frames, obj, 3);
@@ -48,11 +48,11 @@ dR = @displayAllRegion;
 % pause(0.1); imagesc(bg)
 
 
-images = f_readIMGs("beachIMG", ".jpg");
+images = f_readIMGs("SYSTEM\testimages2", ".jpeg");
 % pause(0.1); images = readIMGs("yacht_images", ".PNG");
-% pause(0.1); bg = findBG(images);
-% pause(0.1); imagesc(bg);
-% [labels, objects] = findFG(images(:,:,:,1), bg);
+pause(0.1); bg = findBG(images);
+pause(0.1); imagesc(bg);
+[labels, objects] = findFG(images(:,:,:,1), bg);
 
 
 % pause(0.1); images = readIMGs("yacht_images", ".PNG");
@@ -151,7 +151,7 @@ images = f_readIMGs("beachIMG", ".jpg");
 function sendReq(imDir, outFile)
     
     sendJson = "tosend.json";
-
+    
 %     node index C:/Users/Student/Desktop/Autonomous-Litter-Collection/b-c.png C:/Users/Student/Desktop/tosend.json
     send = "node index " + cd + '/' + imDir + " " + cd + '/' + sendJson;
     system(send);

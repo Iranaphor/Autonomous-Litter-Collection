@@ -8,4 +8,4 @@ It needs to open the infinate bg process of downloading the files from the serve
 
 
 2. analysis system
-----this file compares the latest image with the background image every minute, extracts the objects and saves the 
+----this file compares the latest image with the background image every minute, extracts the objects, sends and saves the results from the cloud vision api

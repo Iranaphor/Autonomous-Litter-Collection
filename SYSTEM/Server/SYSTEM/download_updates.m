@@ -1,5 +1,5 @@
 function download_updates() %% Function Setup:
-    pauseTime = 60;
+    pauseTime = 5;
 	totalIm = 20;
 	imPath = 'images/'; %{add system to define images to load}
     frameURL = 'http://james.yourthought.co.uk/frame.jpeg';
@@ -27,7 +27,6 @@ function download_updates() %% Function Setup:
     frames = uint8(ones(size(frm, 1), size(frm, 2), size(frm, 3), totalIm));
     clear frm;
     
-    
     disp("    Read in data");
 	for i = 1:totalIm
         if isfile([imPath, 'frame', int2str(i), '.jpeg'])
@@ -47,6 +46,13 @@ function download_updates() %% Function Setup:
     disp("    Begin system at frame - " + int2str(oldestImID));
     
     
+    
+    
+    %% Step A+: Connect to server via FTP
+    %ftpobj = ftp('s1.yourthought.co.uk','james-rpi','james25');
+        
+    
+    
 	%% Step C: download and process updates
     fprintf("\n\nLoop Begun:\n")
 	while true
@@ -63,6 +69,7 @@ function download_updates() %% Function Setup:
             try
                 fprintf("    Try frameURL:     ...");
                 frames(:,:,:,oldestImID) = imread(frameURL);
+                %frames(:,:,:,oldestImID) = mget(ftpobj,'frame.jpeg');
                 urlFail = false;
             catch ERR
 %                 if(strcmp(ERR.identifier,'MATLAB:imagesci:imread:urlRead'))
@@ -81,9 +88,9 @@ function download_updates() %% Function Setup:
 		
         % Step 3: generate and save the bg image
         disp("    Saving background image");
- 		imwrite(mode(frames, 4), [imPath, '_bg.jpeg']);
-		%imwrite(mean(frames, 4), [imPath, '_bg.jpeg']);
-		%imwrite(median(frames, 4), [imPath, '_bg.jpeg']);
+ 		%imwrite(mode(frames, 4), [imPath, '_bg_mode.jpeg']);
+		%imwrite(mean(frames, 4), [imPath, '_bg_mean.jpeg']);
+		imwrite(median(frames, 4), [imPath, '_bg_median.jpeg']);
 		
 		
         % Step 4: save ID of new oldest to txt file
