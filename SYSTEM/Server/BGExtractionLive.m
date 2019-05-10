@@ -40,7 +40,7 @@ dR = @displayAllRegion;
 
 %%
 
-0% pause(0.1); obj = camSetup('winvideo', 2);
+% pause(0.1); obj = camSetup('winvideo', 2);
 % pause(0.1); preview(obj);
 % pause(0.1); frames = camStart(obj, 20, 1); %Grab 20 images, 1 sec apart from cam "obj"
 % pause(0.1); frames = frameUpdate(frames, obj, 3);
